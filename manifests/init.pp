@@ -154,7 +154,6 @@
 #
 class logstashforwarder(
   $ensure                  = $logstashforwarder::params::ensure,
-  $lsf_name                  = $logstashforwarder::params::lsf_name,
   $servers                 = undef,
   $ssl_cert                = undef,
   $ssl_key                 = undef,
