@@ -101,6 +101,11 @@ class logstashforwarder::config {
       false => undef,
     }
 
+    file { "/etc/init.d/${logstashforwarder::service_name}":
+      ensure  => file,
+      content => template("${module_name}/etc/init.d/logstashforwarder.Debian.erb"),
+    }
+
     file { $logstashforwarder::configdir:
       ensure => directory,
       mode   => '0644',
