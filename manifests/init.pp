@@ -224,7 +224,7 @@ class logstashforwarder(
     subscribe => Class['logstashforwarder::package'],
   }
   # service(s)
-  class { 'logstashforwarder::service': 
+  class { 'logstashforwarder::service':
     subscribe => Class['logstashforwarder::package','logstashforwarder::config'],
   }
 }

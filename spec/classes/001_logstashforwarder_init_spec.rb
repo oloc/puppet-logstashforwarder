@@ -38,12 +38,12 @@ describe 'logstashforwarder', :type => 'class' do
 
       context 'main class tests' do
         # init.pp
-        it { should contain_class('logstashforwarder::params') }
-        it { should contain_class('logstashforwarder::config').that_requires('Class[logstashforwarder::package]') }
-        it { should contain_class('logstashforwarder::service').that_requires('Class[logstashforwarder::package]').that_requires('Class[logstashforwarder::config]') }
-        it { should contain_file('/etc/logstashforwarder') }
-        it { should contain_file('/etc/logstashforwarder/ssl') }
-        it { should contain_logstashforwarder_config('lsf-config') }
+        it { should contain_class('logstashforwarder::repo').that_notifies('Class[logstashforwarder::package]') }
+        it { should contain_class('logstashforwarder::config').that_subscribes('Class[logstashforwarder::package]') }
+        it { should contain_class('logstashforwarder::service').that_subscribes('Class[logstashforwarder::package,logstashforwarder::config]').that_requires('Class[logstashforwarder::config]') }
+        #it { should contain_file('/etc/logstashforwarder') }
+        #it { should contain_file('/etc/logstashforwarder/ssl') }
+        #it { should contain_logstashforwarder_config('lsf-config') }
       end
 
       context 'package installation' do
