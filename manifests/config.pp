@@ -41,6 +41,57 @@ class logstashforwarder::config {
     cwd  => '/',
   }
 
+  # Different path definitions
+  case $::kernel {
+    'Linux': {
+      $configdir   = "/etc/${logstashforwarder::lsf_name}"
+      $package_dir = "/opt/${logstashforwarder::lsf_name}/swdl"
+      $installpath = "/opt/${logstashforwarder::lsf_name}"
+    }
+    'Darwin': {
+      $configdir = '/Library/Application Support/Logstashforwarder'
+      $package_dir = '/Library/Logstashforwarder/swdl'
+      $installpath = '/Library/Logstashforwarder'
+    }
+    default: {
+      fail("\"${module_name}\" provides no config directory default value
+           for \"${::kernel}\"")
+    }
+  }
+
+  # service parameters
+  case $::operatingsystem {
+    'RedHat', 'CentOS', 'Fedora', 'Scientific', 'Amazon', 'OracleLinux': {
+      $service_name       = $logstashforwarder::lsf_name
+      $service_hasrestart = true
+      $service_hasstatus  = true
+      $service_pattern    = $service_name
+      $service_providers  = [ 'init' ]
+      $defaults_location  = '/etc/sysconfig'
+    }
+    'Debian', 'Ubuntu': {
+      $service_name       = $logstashforwarder::lsf_name
+      $service_hasrestart = true
+      $service_hasstatus  = true
+      $service_pattern    = $service_name
+      $service_providers  = [ 'init' ]
+      $defaults_location  = '/etc/default'
+    }
+    'Darwin': {
+      $service_name       = 'net.logstash.forwarder'
+      $service_hasrestart = true
+      $service_hasstatus  = true
+      $service_pattern    = $service_name
+      $service_providers  = [ 'launchd' ]
+      $defaults_location  = false
+    }
+    default: {
+      fail("\"${module_name}\" provides no service parameters
+            for \"${::operatingsystem}\"")
+    }
+  }
+
+
   if ( $logstashforwarder::ensure == 'present' ) {
 
     $ssldir = "${logstashforwarder::configdir}/ssl"
@@ -123,7 +174,7 @@ class logstashforwarder::config {
     logstashforwarder_config { 'lsf-config':
       ensure  => 'present',
       config  => $main_config,
-      path    => '/etc/logstash-forwarder.conf',
+      path    => "${logstashforwarder::configdir}/${logstashforwarder::lsf_name}.conf",
       tag     => "LSF_CONFIG_${::fqdn}",
       owner   => $logstashforwarder::logstashforwarder_user,
       group   => $logstashforwarder::logstashforwarder_group,
