@@ -179,17 +179,10 @@ class logstashforwarder(
   $manage_repo             = false
 ) inherits logstashforwarder::params {
 
-  anchor {'logstashforwarder::begin': }
-  anchor {'logstashforwarder::end': }
-
-
-  #### Validate parameters
-
   # ensure
   if ! ($ensure in [ 'present', 'absent' ]) {
     fail("\"${ensure}\" is not a valid ensure parameter value")
   }
-
 
   #### Manage actions
 
@@ -197,20 +190,19 @@ class logstashforwarder(
   class { 'logstashforwarder::package': }
 
   # configuration
-  class { 'logstashforwarder::config': }
-
+  class { 'logstashforwarder::config':
+    subscribe => Class['logstashforwarder::package'],
+  }
   # service(s)
-  class { 'logstashforwarder::service': }
+  class { 'logstashforwarder::service': 
+    subscribe => Class['logstashforwarder::package','logstashforwarder::config'],
+  }
 
   if ($manage_repo == true) {
     # Set up repositories
-    class { 'logstashforwarder::repo': }
-
-    # Ensure that we set up the repositories before trying to install
-    # the packages
-    Anchor['logstashforwarder::begin']
-    -> Class['logstashforwarder::repo']
-    -> Class['logstashforwarder::package']
+    class { 'logstashforwarder::repo':
+      notify => Class['logstashforwarder::package'],
+    }
   }
 
   #### Manage relationships
