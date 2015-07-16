@@ -38,53 +38,51 @@ describe 'logstashforwarder', :type => 'class' do
 
       context 'main class tests' do
         # init.pp
+        it { should contain_class('logstashforwarder::repo') }
+        it { should contain_class('logstashforwarder::config') }
+        it { should contain_class('logstashforwarder::service') }
+
         it { should contain_class('logstashforwarder::repo').that_notifies('Class[logstashforwarder::package]') }
         it { should contain_class('logstashforwarder::config').that_subscribes('Class[logstashforwarder::package]') }
-        it { should contain_class('logstashforwarder::service').that_subscribes('Class[logstashforwarder::package,logstashforwarder::config]').that_requires('Class[logstashforwarder::config]') }
-        #it { should contain_file('/etc/logstashforwarder') }
-        #it { should contain_file('/etc/logstashforwarder/ssl') }
-        #it { should contain_logstashforwarder_config('lsf-config') }
+        it { should contain_class('logstashforwarder::service').that_subscribes('Class[logstashforwarder::package]').that_subscribes('Class[logstashforwarder::config]')
+        
+        it { should contain_file('/etc/logstash-forwarder/logstash-forwarder.conf') }
+        it { should contain_file('/etc/logstash-forwarder/ssl') }
+        it { should contain_logstashforwarder_config('lsf-config') }
       end
 
       context 'package installation' do
         context 'via repository' do
-          context 'with default settings' do
-            
-           it { should contain_package('logstash-forwarder').with(:ensure => 'present') }
 
+          context 'with default settings' do
+           it { should contain_package('logstash-forwarder').with(:ensure => 'present') }
           end
 
-          context 'with specified version' do
-
+          context 'with specified version 1.0' do
             let (:params) {
               default_params.merge({
               :version => '1.0'
               })
             }
-
             it { should contain_package('logstash-forwarder').with(:ensure => '1.0') }
           end
 
           context 'with auto upgrade enabled' do
-
             let (:params) {
               default_params.merge({
               :autoupgrade => true
               })
             }
-
             it { should contain_package('logstash-forwarder').with(:ensure => 'latest') }
           end
 
           context 'when setting package version and package_url' do
-
             let (:params) {
               default_params.merge({
                 :version     => '0.90.10',
                 :package_url => 'puppet:///path/to/some/logstash-forwarder-0.90.10.#{pkg_ext}'
               })
             }
-
             it { expect { should raise_error(Puppet::Error) } }
           end
 
@@ -267,7 +265,7 @@ describe 'logstashforwarder', :type => 'class' do
           })
         }
 
-        it { should contain_file('/etc/logstashforwarder').with(:ensure => 'absent', :force => true, :recurse => true) }
+        it { should contain_file('/etc/logstash-forwarder/logstash-forwarder.conf').with(:ensure => 'absent', :force => true, :recurse => true) }
         it { should contain_package('logstash-forwarder').with(:ensure => 'purged') }
         it { should contain_service('logstash-forwarder').with(:ensure => 'stopped', :enable => false) }
 
