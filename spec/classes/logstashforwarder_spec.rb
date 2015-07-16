@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rspec-puppet'
 
 describe 'logstashforwarder', :type => 'class' do
 
