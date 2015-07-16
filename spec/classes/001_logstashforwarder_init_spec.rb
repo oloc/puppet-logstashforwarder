@@ -13,6 +13,8 @@ describe 'logstashforwarder', :type => 'class' do
 
     context "on #{os} OS" do
 
+    it { should compile }
+
       case facts[:osfamily]
       when 'Debian'
         let(:defaults_path) { '/etc/default' }
@@ -38,7 +40,8 @@ describe 'logstashforwarder', :type => 'class' do
 
       context 'main class tests' do
         # init.pp
-        it { should contain_class('logstashforwarder::repo') }
+        it { should contain_class('logstashforwarder__repo') }
+        it { should contain_class('repo') }
         it { should contain_class('logstashforwarder::config') }
         it { should contain_class('logstashforwarder::service') }
 
