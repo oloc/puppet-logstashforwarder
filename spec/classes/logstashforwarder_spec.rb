@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe 'logstashforwarder', :type => 'class' do
 
+  default_params = {
+    :servers  => [ '192.168.0.1' ],
+    :ssl_ca   => '/path/to/ssl.ca',
+    :ssl_key  => '/path/to/ssl.key',
+    :ssl_cert => '/path/to/ssl.cert'
+  }
+  
   context "on an unknown OS" do
     context "it should fail" do
       let :facts do {
