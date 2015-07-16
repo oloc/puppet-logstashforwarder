@@ -39,9 +39,7 @@ describe 'logstashforwarder', :type => 'class' do
       }
 
       context 'main class tests' do
-        # init.pp
-        it { should contain_class('logstashforwarder__repo') }
-        it { should contain_class('repo') }
+        it { should contain_class('logstashforwarder::repo') }
         it { should contain_class('logstashforwarder::config') }
         it { should contain_class('logstashforwarder::service') }
 
