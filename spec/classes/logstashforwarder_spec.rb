@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'logstashforwarder', :type => 'class' do
+describe 'Logstashforwarder', :type => 'class' do
 
   default_params = {
     :servers  => [ '192.168.0.1' ],
@@ -8,7 +8,7 @@ describe 'logstashforwarder', :type => 'class' do
     :ssl_key  => '/path/to/ssl.key',
     :ssl_cert => '/path/to/ssl.cert'
   }
-  
+
   context "on an unknown OS" do
     context "it should fail" do
       let :facts do {
@@ -31,9 +31,9 @@ describe 'logstashforwarder', :type => 'class' do
       }
 
       context 'main class tests' do
-        it { should contain_class('logstashforwarder::repo') }
-        it { should contain_class('logstashforwarder::config') }
-        it { should contain_class('logstashforwarder::service') }
+        it { should contain_class('Logstashforwarder::Repo') }
+        it { should contain_class('Logstashforwarder::Config') }
+        it { should contain_class('Logstashforwarder::Service') }
 
         it { should contain_class('logstashforwarder::repo').that_notifies('Class[logstashforwarder::package]') }
         it { should contain_class('logstashforwarder::config').that_subscribes_to('Class[logstashforwarder::package]') }
