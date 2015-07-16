@@ -45,8 +45,8 @@ describe 'logstashforwarder', :type => 'class' do
         it { should contain_class('logstashforwarder::service') }
 
         it { should contain_class('logstashforwarder::repo').that_notifies('Class[logstashforwarder::package]') }
-        it { should contain_class('logstashforwarder::config').that_subscribes('Class[logstashforwarder::package]') }
-        it { should contain_class('logstashforwarder::service').that_subscribes('Class[logstashforwarder::package]').that_subscribes('Class[logstashforwarder::config]') }
+        it { should contain_class('logstashforwarder::config').that_subscribes_to('Class[logstashforwarder::package]') }
+        it { should contain_class('logstashforwarder::service').that_subscribes_to(['Class[logstashforwarder::package]', 'Class[logstashforwarder::config]']) }
         
         it { should contain_file('/etc/logstash-forwarder/logstash-forwarder.conf') }
         it { should contain_file('/etc/logstash-forwarder/ssl') }
