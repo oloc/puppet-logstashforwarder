@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'repo', :type => 'class' do
+describe 'logstashforwarder::repo', :type => 'class' do
 
   default_params = {
     :servers  => [ '192.168.0.1' ],
@@ -8,7 +8,7 @@ describe 'repo', :type => 'class' do
     :ssl_key  => '/path/to/ssl.key',
     :ssl_cert => '/path/to/ssl.cert'
   }
-  
+
   on_supported_os.each do |os, facts|
 
     context "on #{os} OS" do
