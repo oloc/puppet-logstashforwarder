@@ -209,22 +209,17 @@ class logstashforwarder(
   if ($manage_repo == true) {
     # Set up repositories
     class { 'logstashforwarder::repo':
-      ensure => $ensure,
       notify => Class['logstashforwarder::package'],
     }
   }
   # package(s)
-  class { 'logstashforwarder::package':
-    ensure => $ensure,
-  }
+  class { 'logstashforwarder::package': }
   # configuration
   class { 'logstashforwarder::config':
-    ensure    => $ensure,
     subscribe => Class['logstashforwarder::package'],
   }
   # service(s)
-  class { 'logstashforwarder::service':
-    ensure    => $ensure,
+  class { 'logstashforwarder::service': 
     subscribe => Class['logstashforwarder::package','logstashforwarder::config'],
   }
 }
