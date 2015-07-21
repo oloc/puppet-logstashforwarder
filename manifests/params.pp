@@ -92,12 +92,12 @@ class logstashforwarder::params {
   # Different path definitions
   case $::kernel {
     'Linux': {
-      $configdir = '/etc/logstashforwarder'
-      $package_dir = '/opt/logstashforwarder/swdl'
-      $installpath = '/opt/logstashforwarder'
+      $configdir   = "/etc/${lsf_name}"
+      $package_dir = "/opt/${lsf_name}/swdl"
+      $installpath = "/opt/${lsf_name}"
     }
     'Darwin': {
-      $configdir = '/Library/Application Support/Logstashforwarder'
+      $configdir   = '/Library/Application Support/Logstashforwarder'
       $package_dir = '/Library/Logstashforwarder/swdl'
       $installpath = '/Library/Logstashforwarder'
     }
